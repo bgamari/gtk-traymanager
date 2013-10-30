@@ -1,4 +1,4 @@
-{-# LANGUAGE ForeignFunctionInterface, EmptyDataDecls #-}
+{-# LANGUAGE ForeignFunctionInterface, EmptyDataDecls, CPP #-}
 -- | This module implements a TrayManager - an integral part of a
 -- Linux system tray widget, though it is not itself a widget.  This
 -- package exports a single GObject (for use with gtk2hs) that
@@ -97,7 +97,9 @@ toTrayManager :: TrayManagerClass o => o -> TrayManager
 toTrayManager = unsafeCastGObject . toGObject
 
 instance TrayManagerClass TrayManager
+#ifndef WITH_GTK3
 instance ObjectClass TrayManager
+#endif
 instance GObjectClass TrayManager where
   toGObject = GObject . castForeignPtr . unTrayManager
   unsafeCastGObject = TrayManager . castForeignPtr . unGObject
